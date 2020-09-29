@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(MyApp());
@@ -29,8 +30,18 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _numberOfSensors = 0;
 
-  void _findNumberOfSensors() {
+  static const channel = const MethodChannel('shift/sensors_case');
 
+  void _findNumberOfSensors() async {
+    try {
+      final int result = await channel.invokeMethod('findNumberSensors');
+
+      setState(() {
+        _numberOfSensors = result;
+      });
+    } on PlatformException catch (e) {
+
+    }
   }
 
   @override
